@@ -34,13 +34,28 @@
                 <h2>Tulis Komentar</h2>
             </div>
 
-            <form class="comment-form">
+            @if (session('success'))
+                <p role="status">{{ session('success') }}</p>
+            @endif
+
+            @if ($errors->any())
+                <ul role="alert">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            @endif
+
+            <form class="comment-form" action="{{ route('comments.store') }}" method="POST">
+                @csrf
                 <div class="form-group">
                     <label for="comment">Komentar Anda <span>*</span></label>
                     <textarea
                         id="comment"
+                        name="comment"
                         placeholder="Tulis tanggapan atau komentar..."
                         required
+                        {{ old('comment') }}
                     ></textarea>
                 </div>
 
@@ -50,8 +65,10 @@
                         <input
                             type="text"
                             id="name"
+                            name="nama"
                             placeholder="Nama Anda"
                             required
+                            value="{{ old('nama') }}"
                         >
                     </div>
 
@@ -60,8 +77,10 @@
                         <input
                             type="tel"
                             id="phone"
+                            name="phone"
                             placeholder="Nomor Telepon"
                             required
+                            value="{{ old('phone') }}"
                         >
                     </div>
                 </div>
